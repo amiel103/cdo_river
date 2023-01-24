@@ -5,6 +5,7 @@
 
     <v-row >
       <div class='d-flex'>
+
         <v-col 
           no-gutters>
       
@@ -15,12 +16,12 @@
             
             <div width="50">
               {{station}}<br>
-              FECAL: {{ stationValues[0] }} <br>
-              PH: {{ stationValues[1] }} <br>
+              PH: {{ stationValues[0] }} <br>
+              BOD: {{ stationValues[1] }} <br>
               DO: {{ stationValues[2] }}<br>
-              TSS: {{ stationValues[3] }} <br>
-              TEMPERATURE: {{ stationValues[4] }} <br>
-              BOD: {{ stationValues[5] }} <br> 
+              FECAL: {{ stationValues[3] }} <br>
+              TSS: {{ stationValues[4] }} <br>
+              TEMPERATURE: {{ stationValues[5] }} <br> 
             
             </div>
             
@@ -29,8 +30,47 @@
         </v-col>
   
         <v-col md="9" no-gutters>
+
+        
           <v-card class="pa-5 ma-5"
             outlined>    
+
+            <v-tabs
+              v-model="station"
+              bg-color="#0BE1E3"
+            >
+              <div
+                class="d-flex justify-center mb-6">
+
+              <v-tab 
+                value='Station 1'
+                @click="select(this.tab,this.station)"
+              >'Station 1'</v-tab>
+
+              <v-tab 
+                value='Station 2'
+                @click="select(this.tab,this.station)"
+              >'Station 2'</v-tab>
+
+              <v-tab 
+                value='Station 3'
+                @click="select(this.tab,this.station)"
+              >'Station 3'</v-tab>
+
+              <v-tab 
+                value='Station 4'
+                @click="select(this.tab,this.station)"
+              >'Station 4'</v-tab>
+
+              <v-tab 
+                value='Station 5'
+                @click="select(this.tab,this.station)"
+              >'Station 5'</v-tab>
+
+              </div>
+            
+            </v-tabs>
+            
             <v-tabs
               v-model="tab"
               bg-color="#0BE1E3"
@@ -71,15 +111,78 @@
               </div>
               
             </v-tabs>
-
+            <center><h1>AA</h1></center>
             <div>
               <Line :data="data" :options="options" />
             </div>
+
+
 
             <v-btn
               elevation="2"
               @click="getForecast(this.tab , this.station)"
             >predict</v-btn>
+
+
+            <v-dialog
+      v-model="dialog"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn
+          color="primary"
+          v-bind="props"
+          class="ma-5"
+        >
+          ADD NEW DATA
+        </v-btn>
+      </template>
+
+      <v-card>
+        <v-card-text>
+          Add new data to
+          {{ station }}
+          <v-divider></v-divider>
+          <br>
+          <v-text-field
+            label="PH"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="BOD"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="DO"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="FECAL"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="TSS"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="TEMPERATURE"
+            outlined
+          ></v-text-field>
+        </v-card-text>
+        
+      <v-card-actions>
+        <v-btn color="primary" @click="dialog = false">Close</v-btn>
+        <v-btn @click="dialog = false">send data</v-btn>
+      </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+            <v-btn
+              elevation="2"
+              @click="getForecast(this.tab , this.station)"
+            >train Model</v-btn>
+
+
+
           </v-card>
 
         </v-col>
@@ -87,81 +190,6 @@
       </div>
       
     </v-row>
-    
-    
-
-
-    <v-card class="pa-5 ma-5" outlined>
-      
-      <div>
-        <v-tabs
-        v-model="station"
-        bg-color="#0BE1E3"
-      >
-        <div
-        class="d-flex justify-center mb-6">
-
-        <v-tab 
-          value='Station 1'
-          @click="select(this.tab,this.station)"
-        >'Station 1'</v-tab>
-
-        <v-tab 
-          value='Station 2'
-          @click="select(this.tab,this.station)"
-        >'Station 2'</v-tab>
-
-        <v-tab 
-          value='Station 3'
-          @click="select(this.tab,this.station)"
-        >'Station 3'</v-tab>
-
-        <v-tab 
-          value='Station 4'
-          @click="select(this.tab,this.station)"
-        >'Station 4'</v-tab>
-
-        <v-tab 
-          value='Station 5'
-          @click="select(this.tab,this.station)"
-        >'Station 5'</v-tab>
-
-        </div>
-        
-      </v-tabs>
-
-      </div>
-
-
-      <div>
-        <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 1')"
-      >1</v-btn>
-      
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 2')"
-      >2</v-btn>
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 3')"
-      >3</v-btn>
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 4')"
-      >4</v-btn>
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 5')"
-      >5</v-btn>
-      </div>
-      
-
-    </v-card>
-        
-
-
     
   </div>
   
@@ -185,6 +213,7 @@ export default {
   },
   data() {
     return {
+      dialog:false,
       src: img,
       tab: 'pH_Structured_data.csv',
       station: 'Station 1',
@@ -228,7 +257,7 @@ export default {
       }
 
       
-      const url = 'http://0ced-34-124-154-216.ngrok.io/'
+      const url = 'http://fbdb-35-221-19-139.ngrok.io/'
       const head = 'getForecast/'+feature+'-'+reqStation
       const req = url+head
       console.log(req)
@@ -272,7 +301,7 @@ export default {
             data: y_value
           },
           {
-            label: feature,
+            label: 'forcasted',
             backgroundColor: 'black',
             data: forecast
           }
@@ -328,7 +357,7 @@ export default {
     },
 
     async load(){
-      const url = 'http://0ced-34-124-154-216.ngrok.io'
+      const url = 'http://fbdb-35-221-19-139.ngrok.io'
       const head = '/getAllData'
 
       let x;
