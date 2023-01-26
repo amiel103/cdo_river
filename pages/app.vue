@@ -19,12 +19,21 @@
             
             <div width="50">
               {{station}}<br>
+<<<<<<< HEAD:pages/app.vue
               BOD: {{ stationValues[0] }} <br>
               DO: {{ stationValues[1] }} <br>
               FECAL: {{ stationValues[2] }}<br>
               PH: {{ stationValues[3] }} <br>
               TEMPERATURE: {{ stationValues[4] }} <br>
               TSS: {{ stationValues[5] }} <br> 
+=======
+              PH: {{ stationValues[0] }} <br>
+              BOD: {{ stationValues[1] }} <br>
+              DO: {{ stationValues[2] }}<br>
+              FECAL: {{ stationValues[3] }} <br>
+              TSS: {{ stationValues[4] }} <br>
+              TEMPERATURE: {{ stationValues[5] }} <br> 
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
             
             </div>
             
@@ -114,7 +123,11 @@
               </div>
               
             </v-tabs>
+<<<<<<< HEAD:pages/app.vue
             <h1>AA</h1>
+=======
+            <center><h1>AA</h1></center>
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
             <div>
               <Line :data="data" :options="options" />
             </div>
@@ -125,6 +138,7 @@
               elevation="2"
               @click="getForecast(this.tab , this.station)"
             >predict</v-btn>
+<<<<<<< HEAD:pages/app.vue
 
             
             <NuxtLink to="/addData">
@@ -132,6 +146,8 @@
               <v-btn>Add Data</v-btn>
 
             </NuxtLink>
+=======
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
 
             
             <v-btn
@@ -139,12 +155,79 @@
               @click="getForecast(this.tab , this.station)"
             >train Model</v-btn>
 
+<<<<<<< HEAD:pages/app.vue
 
+=======
+            <v-dialog
+      v-model="dialog"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn
+          color="primary"
+          v-bind="props"
+          class="ma-5"
+        >
+          ADD NEW DATA
+        </v-btn>
+      </template>
+
+      <v-card>
+        <v-card-text>
+          Add new data to
+          {{ station }}
+          <v-divider></v-divider>
+          <br>
+          <v-text-field
+            label="PH"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="BOD"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="DO"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="FECAL"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="TSS"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            label="TEMPERATURE"
+            outlined
+          ></v-text-field>
+        </v-card-text>
+        
+      <v-card-actions>
+        <v-btn color="primary" @click="dialog = false">Close</v-btn>
+        <v-btn @click="dialog = false">send data</v-btn>
+      </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+            <v-btn
+              elevation="2"
+              @click="getForecast(this.tab , this.station)"
+            >train Model</v-btn>
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
 
           </v-card>
 
         </v-col>
 
+<<<<<<< HEAD:pages/app.vue
+=======
+
+          </v-card>
+
+        </v-col>
+
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
       </div>
       
     </v-row>
@@ -170,12 +253,15 @@ export default {
   data() {
     return {
       dialog:false,
+<<<<<<< HEAD:pages/app.vue
       sendPH:'',
       sendBOD:'',
       sendDO:'',
       sendFECAL:'',
       sendTSS:'',
       sendTEMPERATURE:'',
+=======
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
       src: img,
       tab: 'pH_Structured_data.csv',
       station: 'Station 1',
@@ -214,7 +300,11 @@ export default {
         reqStation = 5
       }
       
+<<<<<<< HEAD:pages/app.vue
       const url = 'http://127.0.0.1:8000/'
+=======
+      const url = 'http://fbdb-35-221-19-139.ngrok.io/'
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
       const head = 'getForecast/'+feature+'-'+reqStation
       const req = url+head
       console.log(req)
@@ -254,7 +344,11 @@ export default {
             data: y_value
           },
           {
+<<<<<<< HEAD:pages/app.vue
             label: 'forecasted values',
+=======
+            label: 'forcasted',
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
             backgroundColor: 'black',
             data: forecast
           }
@@ -303,7 +397,11 @@ export default {
       
     },
     async load(){
+<<<<<<< HEAD:pages/app.vue
       const url = 'http://127.0.0.1:8000'
+=======
+      const url = 'http://fbdb-35-221-19-139.ngrok.io'
+>>>>>>> 6d8c5691c27707a064f4b4517915b1873d2af78c:app.vue
       const head = '/getAllData'
       let x;
       const headers = { 'content-type': 'application/json' , 'Access-Control-Allow-Origin' : '*'};
