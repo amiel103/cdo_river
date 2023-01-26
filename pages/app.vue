@@ -1,10 +1,14 @@
 <template>
 
-  <div>
-
-
-    <v-row >
+  <div >
+    
+      <h1 class="d-flex justify-center mt-6" > 
+        WATER QUALITY MONITORING SYSTEM
+      </h1>
+    
+    <v-row class="d-flex justify-center mb-6">
       <div class='d-flex'>
+
         <v-col 
           no-gutters>
       
@@ -15,12 +19,12 @@
             
             <div width="50">
               {{station}}<br>
-              FECAL: {{ stationValues[0] }} <br>
-              PH: {{ stationValues[1] }} <br>
-              DO: {{ stationValues[2] }}<br>
-              TSS: {{ stationValues[3] }} <br>
+              BOD: {{ stationValues[0] }} <br>
+              DO: {{ stationValues[1] }} <br>
+              FECAL: {{ stationValues[2] }}<br>
+              PH: {{ stationValues[3] }} <br>
               TEMPERATURE: {{ stationValues[4] }} <br>
-              BOD: {{ stationValues[5] }} <br> 
+              TSS: {{ stationValues[5] }} <br> 
             
             </div>
             
@@ -29,8 +33,47 @@
         </v-col>
   
         <v-col md="9" no-gutters>
+
+        
           <v-card class="pa-5 ma-5"
             outlined>    
+
+            <v-tabs
+              v-model="station"
+              bg-color="#0BE1E3"
+            >
+              <div
+                class="d-flex justify-center mb-6">
+
+              <v-tab 
+                value='Station 1'
+                @click="select(this.tab,this.station)"
+              >'Station 1'</v-tab>
+
+              <v-tab 
+                value='Station 2'
+                @click="select(this.tab,this.station)"
+              >'Station 2'</v-tab>
+
+              <v-tab 
+                value='Station 3'
+                @click="select(this.tab,this.station)"
+              >'Station 3'</v-tab>
+
+              <v-tab 
+                value='Station 4'
+                @click="select(this.tab,this.station)"
+              >'Station 4'</v-tab>
+
+              <v-tab 
+                value='Station 5'
+                @click="select(this.tab,this.station)"
+              >'Station 5'</v-tab>
+
+              </div>
+            
+            </v-tabs>
+            
             <v-tabs
               v-model="tab"
               bg-color="#0BE1E3"
@@ -71,15 +114,33 @@
               </div>
               
             </v-tabs>
-
+            <h1>AA</h1>
             <div>
               <Line :data="data" :options="options" />
             </div>
+
+
 
             <v-btn
               elevation="2"
               @click="getForecast(this.tab , this.station)"
             >predict</v-btn>
+
+            
+            <NuxtLink to="/addData">
+            
+              <v-btn>Add Data</v-btn>
+
+            </NuxtLink>
+
+            
+            <v-btn
+              elevation="2"
+              @click="getForecast(this.tab , this.station)"
+            >train Model</v-btn>
+
+
+
           </v-card>
 
         </v-col>
@@ -87,81 +148,6 @@
       </div>
       
     </v-row>
-    
-    
-
-
-    <v-card class="pa-5 ma-5" outlined>
-      
-      <div>
-        <v-tabs
-        v-model="station"
-        bg-color="#0BE1E3"
-      >
-        <div
-        class="d-flex justify-center mb-6">
-
-        <v-tab 
-          value='Station 1'
-          @click="select(this.tab,this.station)"
-        >'Station 1'</v-tab>
-
-        <v-tab 
-          value='Station 2'
-          @click="select(this.tab,this.station)"
-        >'Station 2'</v-tab>
-
-        <v-tab 
-          value='Station 3'
-          @click="select(this.tab,this.station)"
-        >'Station 3'</v-tab>
-
-        <v-tab 
-          value='Station 4'
-          @click="select(this.tab,this.station)"
-        >'Station 4'</v-tab>
-
-        <v-tab 
-          value='Station 5'
-          @click="select(this.tab,this.station)"
-        >'Station 5'</v-tab>
-
-        </div>
-        
-      </v-tabs>
-
-      </div>
-
-
-      <div>
-        <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 1')"
-      >1</v-btn>
-      
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 2')"
-      >2</v-btn>
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 3')"
-      >3</v-btn>
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 4')"
-      >4</v-btn>
-      <v-btn
-        elevation="2"
-        @click="select(this.tab , 'Station 5')"
-      >5</v-btn>
-      </div>
-      
-
-    </v-card>
-        
-
-
     
   </div>
   
@@ -175,9 +161,7 @@ import img from '~/assets/map of cdo.png'
 import axios from 'axios'
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
 import { Line } from 'vue-chartjs'
-
 Chart.register( CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
-
 export default {
   name: 'App',
   components: {
@@ -185,6 +169,13 @@ export default {
   },
   data() {
     return {
+      dialog:false,
+      sendPH:'',
+      sendBOD:'',
+      sendDO:'',
+      sendFECAL:'',
+      sendTSS:'',
+      sendTEMPERATURE:'',
       src: img,
       tab: 'pH_Structured_data.csv',
       station: 'Station 1',
@@ -199,15 +190,11 @@ export default {
           }
         ]
       },
-
       options:{
         responsive: true,
         maintainAspectRatio: false
       },
-
       allData:[],
-
-
     }
   },
   methods:{
@@ -226,9 +213,8 @@ export default {
       }else if(station=='Station 5'){
         reqStation = 5
       }
-
       
-      const url = 'http://0ced-34-124-154-216.ngrok.io/'
+      const url = 'http://127.0.0.1:8000/'
       const head = 'getForecast/'+feature+'-'+reqStation
       const req = url+head
       console.log(req)
@@ -243,13 +229,11 @@ export default {
         // handle error
         console.log(error);
       })
-
       const aaa = {
         label: feature,
         backgroundColor: 'black',
         data: forecast
       }
-
       let year=[];
       let y_value = [];
       for (let i = 0; i < this.allData.length; i++) {
@@ -258,11 +242,9 @@ export default {
           for (let j = 0; j < this.allData[i][feature].length; j++) {
             year.push(this.allData[i][feature][j]['Year'])
             y_value.push(this.allData[i][feature][j][station])
-
           }
         }
         } 
-
       let data = {
         labels: year,
         datasets: [
@@ -272,7 +254,7 @@ export default {
             data: y_value
           },
           {
-            label: feature,
+            label: 'forecasted values',
             backgroundColor: 'black',
             data: forecast
           }
@@ -283,7 +265,6 @@ export default {
       this.data = data
       
     },
-
     select(feature , station){
       
       console.log(feature)
@@ -292,11 +273,9 @@ export default {
       let y_value = [];
       for (let i = 0; i < this.allData.length; i++) {
         if( feature == Object.keys(this.allData[i])[0] ){
-
           for (let j = 0; j < this.allData[i][feature].length; j++) {
             year.push(this.allData[i][feature][j]['Year'])
             y_value.push(this.allData[i][feature][j][station])
-
           }
           
         }
@@ -306,9 +285,7 @@ export default {
         
         stationValues.push( value) 
       } 
-
       
-
       let data = {
         labels: year,
         datasets: [
@@ -323,14 +300,11 @@ export default {
       this.stationValues = stationValues
       this.data = data
         
-
       
     },
-
     async load(){
-      const url = 'http://0ced-34-124-154-216.ngrok.io'
+      const url = 'http://127.0.0.1:8000'
       const head = '/getAllData'
-
       let x;
       const headers = { 'content-type': 'application/json' , 'Access-Control-Allow-Origin' : '*'};
       await axios.get(url+head,headers)
@@ -341,11 +315,35 @@ export default {
       })
       .catch(function (error) {
         // handle error
+        console.log("error here")
         console.log(error);
       })
-
       this.allData = x;
       this.select("pH_Structured_data.csv", this.station);
+      
+    },
+
+    async sendData(){
+      const data = {
+        'station':this.station,
+        "data":[{
+          "BOD_Structured_data":this.sendBOD,
+          "DO_Structured_data":this.sendDO,
+          "Fecal_Structured_data":this.sendFECAL,
+          "pH_Structured_data":this.sendPH,
+          "Temperature_Structured_data":this.sendTEMPERATURE,
+          "TSS_Structured_data":this.sendTSS
+        }]
+      }
+
+      const headers = { 'content-type': 'application/json' , 'Access-Control-Allow-Origin' : '*'};
+      await axios.post('http://127.0.0.1:8000/addData' ,data , headers).then(function (response) {
+        console.log("done")  
+        this.dialog = false
+      }).catch(function(error) {
+        console.log(" error" )
+        console.log(error)
+      })
 
       
     }
@@ -355,7 +353,15 @@ export default {
     this.load();
     
     
-
   }
 }
 </script>
+
+<style>
+h1.aaa{
+
+}
+
+
+
+</style>
